@@ -45,33 +45,37 @@ class OnlineSalesRegisterCollector:
         twenty_percent_tax = []
         total = []
         for item in self.name_items:
-            if self.tax_rate[item] == 20:
+            if self.__tax_rate[item] == 20:
                 twenty_percent_tax.append(item)
-            if item in self.__item_price:
-                total.append(self.__item_price[item])
-            amount = sum(total)
-            if len(total)>10:
-                amount *= 0.9
-        return amount*0.2
-        
+        for item in twenty_percent_tax:
+            total.append(self.__item_price[item])
+        amount = sum(total)
+        if self.__number_items > 10:
+            amount *= 0.9
+        return amount * 0.2
+    
     def ten_percent_tax_calculation(self):
         ten_percent_tax = []
         total = []
         for item in self.name_items:
-            if self.tax_rate[item] == 10:
+            if self.__tax_rate[item] == 10:
                 ten_percent_tax.append(item)
-            if item in self.__item_price:
-                total.append(self.__item_price[item])
-            amount = sum(total)
-            if len(total)>10:
-                amount *= 0.9
-            return amount*0.1
+        for item in ten_percent_tax:
+            total.append(self.__item_price[item])
+        amount = sum(total)
+        if self.__number_items > 10:
+            amount *= 0.9
+        return amount * 0.1
+
+    
     def total_tax(self):
         return (self.ten_percent_tax_calculation()+self.twenty_percent_tax_calculation())
     
     @staticmethod
     def get_telephone_number(telephone_number):
-        if len(telephone_number)!=10:
+        if not isinstance(telephone_number, int):
+            raise ValueError('Необходимо ввести цифры')
+        if len(str(telephone_number))!=10:
             raise ValueError('Необходимо ввести 10 цифр после "+7"')
         else: 
             return f'+7{telephone_number}'
